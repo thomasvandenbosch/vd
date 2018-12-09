@@ -4,6 +4,7 @@
 
 'TODO Weeknummers tonen bij overzicht
 
+Imports System.Globalization
 Imports System.IO
 
 Public Class Form1
@@ -37,13 +38,13 @@ Public Class Form1
 
         File.WriteAllText(txtPath, $"{datum.Day.ToString().PadLeft(2, "0")}/{datum.Month.ToString().PadLeft(2, "0")}/{datum.Year} {ploeg}")
 
-        txtResultaat.Text += $"{datum.ToString("ddd dd/MM/yyyy")} {ploeg}" & vbCrLf
-        txtResultaat.Text += New String("-", 15) & vbCrLf
+        PrintLijn(datum, ploeg)
+        txtResultaat.Text += New String("-", 22) & vbCrLf
 
         For i = 1 To 14
             datum = VolgendeDatum(datum)
             ploeg = NieuwePloeg(ploeg)
-            txtResultaat.Text += $"{datum.ToString("ddd dd/MM/yyyy")} {ploeg}" & vbCrLf
+            PrintLijn(datum, ploeg)
         Next i
         txtResultaat.Text = txtResultaat.Text.Substring(0, txtResultaat.TextLength - 2)
     End Sub
@@ -64,6 +65,10 @@ Public Class Form1
         End If
     End Function
 
+    Private Sub PrintLijn(ByVal datum As Date, ByVal ploeg As String)
+        txtResultaat.Text += $"W {Weeknummer(datum).ToString("00")} | {datum.ToString("ddd dd/MM/yyyy")} {ploeg}" & vbCrLf
+    End Sub
+
     Private Function LaatsteMaandag() As Date
         Dim vandaag As Date = Date.Today
         Dim weekdag As Integer = vandaag.DayOfWeek
@@ -75,5 +80,9 @@ Public Class Form1
         Else
             Return vandaag.AddDays(1 - weekdag)
         End If
+    End Function
+
+    Private Function Weeknummer(ByVal datum As Date) As Integer
+        Return My.Application.Culture.Calendar.GetWeekOfYear(datum, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday)
     End Function
 End Class
