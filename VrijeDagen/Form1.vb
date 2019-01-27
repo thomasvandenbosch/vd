@@ -47,6 +47,8 @@ Public Class Form1
             PrintLijn(datum, ploeg)
         Next i
         txtResultaat.Text = txtResultaat.Text.Substring(0, txtResultaat.TextLength - 2)
+
+        File.WriteAllText("D:\web\Vrije_Dagen.txt", txtResultaat.Text)
     End Sub
 
     Private Function VolgendeDatum(ByVal datum As Date) As Date
